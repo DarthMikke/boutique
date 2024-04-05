@@ -3,5 +3,8 @@ venv/
 db.*
 *.env
 
+__pycache__
+*.pyc
+
 public/*
 !public/.gitkeep
