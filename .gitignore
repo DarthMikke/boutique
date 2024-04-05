@@ -1,6 +1,7 @@
 venv/
 *.db
 db.*
+*.env
 
 public/*
 !public/.gitkeep
