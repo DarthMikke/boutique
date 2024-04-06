@@ -34,7 +34,6 @@ ALLOWED_HOSTS = os.environ["ALLOWED_HOSTS"].split(",")
 
 INSTALLED_APPS = [
     'app',
-    'restless',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
