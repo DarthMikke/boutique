@@ -1,3 +1,6 @@
 [submodule "restless"]
 	path = restless
 	url = https://github.com/DarthMikke/restless
+[submodule "app/rest_additions"]
+	path = app/rest_additions
+	url = https://github.com/DarthMikke/rest-additions.git
