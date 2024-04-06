@@ -26,6 +26,9 @@ class Product(models.Model):
                               on_delete=models.SET_NULL)
 
     def __str__(self):
+        if (self.brand):
+            return "%s, %s" % (self.name, self.brand)
+
         return self.name
 
 
