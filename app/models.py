@@ -37,9 +37,13 @@ class Receipt(models.Model):
     store = models.ForeignKey(Store,
                               on_delete=models.CASCADE)
 
+    def total_amount(self):
+        return sum([x.total_price - x.discount
+                    for x in self.purchases.all()])/100.0
+
     def __str__(self):
         return "%.2f kr, %s" % (
-            sum([x.total_price for x in self.purchases.all()])/100.0,
+            self.total_amount(),
             self.date
         )
 
