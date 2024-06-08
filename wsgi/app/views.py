@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic.base import View, TemplateView
-from django.views.generic.list import ListView
+from .rest_additions import TemplateListView
 from django.http import HttpResponse
 
 from .models import Receipt
@@ -19,6 +19,12 @@ class Login(View):
             return HttpResponse(status=401)
 
 
-class Dashboard(ListView):
+class Dashboard(TemplateListView):
     template_name = "boutique/dashboard.html"
     model = Receipt
+    identifiers = []
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(repr(context))
+        return context
