@@ -6,4 +6,4 @@
 	url = https://github.com/DarthMikke/rest-additions.git
 [submodule "wsgi/design-system"]
 	path = wsgi/design-system
-	url = https://github.com/DarthMikke/design-system.git
+	url = git@github.com:DarthMikke/design-system
