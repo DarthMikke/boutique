@@ -8,3 +8,5 @@ __pycache__
 
 public/*
 !public/.gitkeep
+
+node_modules
