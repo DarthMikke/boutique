@@ -1,0 +1,16 @@
+
+.receipt {
+  display: grid;
+
+  .store {
+    grid-row: 1/2;
+  }
+
+  .date {
+    grid-row: 2/3;
+  }
+
+  .total {
+    grid-row: 1/-1;
+  }
+}

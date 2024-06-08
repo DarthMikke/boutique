@@ -1,0 +1,1 @@
+.receipt{display:grid}.receipt .store{grid-row:1/2}.receipt .date{grid-row:2/3}.receipt .total{grid-row:1/-1}
