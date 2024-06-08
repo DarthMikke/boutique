@@ -6,11 +6,15 @@
     grid-row: 1/2;
   }
 
-  .date {
+  .date,.count {
     grid-row: 2/3;
   }
 
   .total {
     grid-row: 1/-1;
+  }
+
+  .total,.count {
+    text-align: end;
   }
 }
