@@ -1,0 +1,21 @@
+version: '3.9'
+services:
+  webhost:
+    image: ghcr.io/darthmikke/webhost
+    volumes:
+      - ../public:/srv/portfolio/public
+      - ./dev.conf:/srv/apache/dev.conf
+    ports:
+      - 8081:80
+  django:
+    build: ./wsgi
+    pull_policy: always
+    volumes:
+      - ../wsgi:/app
+    command: runserver 0.0.0.0:5000
+    # hostname: django
+  db:
+    image: postgres
+    # hostname: postgres
+networks:
+  rproxy:
