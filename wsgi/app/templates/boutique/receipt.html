@@ -1,0 +1,21 @@
+{%extends "boutique/base.html" %}
+{%block content%}
+	<div class="panes">
+		<main class="pane">
+			<h1>{{model.total_amount}}, {{ model.store.name }}</h1>
+			<section class='receipt'>
+				<ul>
+					{% for item in model.purchases.all %}
+						<li>
+							{{ item.amount }} {{item.product.name}} ({{item.product.brand.name}}), {{item.total_price}}
+							({{item.discount}} rabatt)
+						<!-- <span class="account"></span> -->
+						</li>
+					{% empty %}
+						<p>Ingen kvitteringar.</p>
+					{% endfor %}
+				</ul>
+			</section>
+		</main>
+	</div>
+{%endblock%}
