@@ -1,18 +1,25 @@
 {%extends "boutique/base.html" %}
+{%load boutique%}
 {%block content%}
 	<div class="panes">
 		<main class="pane">
 			<h1>{{model.total_amount}}, {{ model.store.name }}</h1>
 			<section class='receipt'>
-				<ul>
+				<h2>
+					{{ model.store.name }}
+				</h2>
+				<time datetime="{{ model.date }}">{{ model.date }}</time>
+				<ul class="receipt__items">
 					{% for item in model.purchases.all %}
 						<li>
-							{{ item.amount }} {{item.product.name}} ({{item.product.brand.name}}), {{item.total_price}}
-							({{item.discount}} rabatt)
+							<span class="receit__item__count">{{ item.amount }} </span>
+							<span class="receipt__item__name">
+							{{item.product.name}}</span> <span class="receipt__item__brand">{{item.product.brand.name}}</span>, <span class="receipt__item__price">{{item.total_price}}</span>
+							(<span class="receipt__item__discount">{{item.discount|currency}}</span> rabatt)
 						<!-- <span class="account"></span> -->
 						</li>
 					{% empty %}
-						<p>Ingen kvitteringar.</p>
+						<p>Du kjøpte ikkje noko.</p>
 					{% endfor %}
 				</ul>
 			</section>
