@@ -11,11 +11,13 @@
 				<time datetime="{{ model.date }}">{{ model.date }}</time>
 				<ul class="receipt__items">
 					{% for item in model.purchases.all %}
-						<li>
-							<span class="receit__item__count">{{ item.amount }} </span>
+						<li class="receipt__item">
+							<span class="receipt__item__count">{{ item.amount }} </span>
 							<span class="receipt__item__name">
-							{{item.product.name}}</span> <span class="receipt__item__brand">{{item.product.brand.name}}</span>, <span class="receipt__item__price">{{item.total_price}}</span>
-							(<span class="receipt__item__discount">{{item.discount|currency}}</span> rabatt)
+							{{item.product.name}}</span> <span class="receipt__item__brand">{{item.product.brand.name}}</span> <span class="receipt__item__price">{{item.total_price}}</span>
+							{%if item.discount > 0 %}
+							<span class="receipt__item__discount">{{item.discount|currency}}</span>
+							{%endif%}
 						<!-- <span class="account"></span> -->
 						</li>
 					{% empty %}

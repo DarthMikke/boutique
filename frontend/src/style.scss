@@ -20,3 +20,35 @@
     text-align: end;
   }
 }
+
+.receipt {
+  font-family: monospace;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item {
+    display: grid;
+    &__count {
+      grid-row: 1/2;
+    }
+    &__name {
+      grid-row: 1/2;
+    }
+    &__brand {
+      grid-row: 2/3;
+    }
+    &__price {
+      grid-row: 1/2;
+    }
+    &__discount {
+      grid-row: 2/3;
+    }
+  }
+}
