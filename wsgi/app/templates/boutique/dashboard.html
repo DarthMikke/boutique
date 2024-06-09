@@ -6,7 +6,7 @@
 			<h1>Månadens kjøp</h1>
 			<div class='list receipt-list'>
 				{% for receipt in models %}
-					<a href="{%url 'receipt' receipt.id%}" class="list-item receipt">
+					<a href="{%url 'receipt' receipt.id%}" class="list-item receipt-list__item">
 						<span class="store">{{ receipt.store.name }}</span>
 						<span class="date">{{ receipt.date|date }}</span>
 						<span class="total">{{ receipt.total_amount|currency }}</span>
