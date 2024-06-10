@@ -49,13 +49,15 @@
     &__discount {
       grid-area: discount;
 
-      &::before {
-        content: "(-";
-        display: inline-block;
-      }
-      &::after {
-        content: ")";
-        display: inline-block;
+      &:not(:empty) {
+        &::before {
+          content: "(-";
+          display: inline-block;
+        }
+        &::after {
+          content: ")";
+          display: inline-block;
+        }
       }
     }
     &__price, &__discount {
