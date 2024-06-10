@@ -13,10 +13,13 @@
 					{% for item in model.purchases.all %}
 						<li class="receipt__item">
 							<span class="receipt__item__count">{{ item.amount }} </span>
-							<span class="receipt__item__name">
-							{{item.product.name}}</span> <span class="receipt__item__brand">{{item.product.brand.name}}</span> <span class="receipt__item__price">{{item.total_price}}</span>
+							<span class="receipt__item__product">
+								<span class="receipt__item__name">{{item.product.name}}</span>
+								<span class="receipt__item__brand">{{item.product.brand.name}}</span>
+							</span>
+							<span class="receipt__item__price">{{item.total_price|minor_currency}}</span>
 							{%if item.discount > 0 %}
-							<span class="receipt__item__discount">{{item.discount|currency}}</span>
+							<span class="receipt__item__discount">{{item.discount|minor_currency}}</span>
 							{%endif%}
 						<!-- <span class="account"></span> -->
 						</li>

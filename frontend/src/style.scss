@@ -35,20 +35,31 @@
 
   &__item {
     display: grid;
+    grid-template-areas: "product_name price"
+                         "count discount";
     &__count {
-      grid-row: 1/2;
+      grid-area: count;
     }
-    &__name {
-      grid-row: 1/2;
-    }
-    &__brand {
-      grid-row: 2/3;
+    &__product {
+      grid-area: product_name;
     }
     &__price {
-      grid-row: 1/2;
+      grid-area: price;
     }
     &__discount {
-      grid-row: 2/3;
+      grid-area: discount;
+
+      &::before {
+        content: "(-";
+        display: inline-block;
+      }
+      &::after {
+        content: ")";
+        display: inline-block;
+      }
+    }
+    &__price, &__discount {
+      text-align: end;
     }
   }
 }
