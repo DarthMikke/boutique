@@ -28,5 +28,6 @@ class ProductAdmin(admin.ModelAdmin):
 # Register your models here.
 admin.site.register(Store)
 admin.site.register(Brand)
+admin.site.register(ProductSize)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Receipt, ReceiptAdmin)

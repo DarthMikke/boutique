@@ -32,6 +32,23 @@ class Product(models.Model):
         return self.name
 
 
+class ProductSize(models.Model):
+    UNIT_CHOICES = (
+        ['kg', 'kg'], ['g', 'g'],
+        ['l', 'l'], ['cl', 'cl'], ['dl', 'dl'], ['ml', 'ml'],
+        ['m', 'm'], ['cm', 'cm'], ['sqm', 'sqm'],
+        ['pcs', 'pcs'],
+    )
+    size = models.DecimalField(max_digits=7, decimal_places=3, default=1)
+    unit = models.CharField(max_length=250,
+                            choices=UNIT_CHOICES,
+                            blank=False,
+                            default='pcs')
+
+    def __str__(self):
+        return str(self.size) + " " + str(self.unit)
+
+
 class Receipt(models.Model):
     date = models.DateTimeField()
     store = models.ForeignKey(Store,
@@ -51,6 +68,9 @@ class Receipt(models.Model):
 class Purchase(models.Model):
     product = models.ForeignKey(Product,
                                 on_delete=models.CASCADE)
+    size = models.ForeignKey(ProductSize,
+                             on_delete=models.CASCADE,
+                             null=True, blank=True)
     amount = models.DecimalField(max_digits=7, decimal_places=3)
     total_price = models.IntegerField()
     discount = models.IntegerField()
