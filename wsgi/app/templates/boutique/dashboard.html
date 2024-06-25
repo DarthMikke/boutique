@@ -16,6 +16,9 @@
 				{% empty %}
 					<p>Ingen kvitteringar.</p>
 				{% endfor %}
+				<a href="{% url 'admin:app_receipt_add' %}" class="btn">
+					Ny kvittering
+				</a>
 			</div>
 		</main>
 	</div>
