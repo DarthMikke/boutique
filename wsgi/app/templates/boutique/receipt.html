@@ -3,29 +3,35 @@
 {%block content%}
 	<div class="panes">
 		<main class="pane">
-			<h1>{{model.total_amount}}, {{ model.store.name }}</h1>
-			<section class='receipt'>
-				<h2>
-					{{ model.store.name }}
-				</h2>
-				<time datetime="{{ model.date }}">{{ model.date }}</time>
-				<table class="receipt__items">
-					{% for item in model.purchases.all %}
-						<tr class="receipt__item">
-							<td class="receipt__item__count">{{ item.amount }} </td>
-							<td class="receipt__item__product">
-								<span class="receipt__item__name">{{item.product.name}}</span>
-								<span class="receipt__item__brand">{{item.product.brand.name}}</span>
-							</td>
-							<td class="receipt__item__price">{{item.total_price|minor_currency}}</td>
-							<td class="receipt__item__discount">{%if item.discount > 0 %}{{item.discount|minor_currency}}{%endif%}</td>
-						<!-- <span class="account"></span> -->
-						</tr>
-					{% empty %}
-						<p>Du kjøpte ikkje noko.</p>
-					{% endfor %}
-				</table>
-			</section>
+			<div id="receipt-main">
+				<h1>{{model.total_amount}}, {{ model.store.name }}</h1>
+				<a class="edit" id="edit_receipt"
+					href="{% url 'admin:app_receipt_change' model.id %}">
+					Rediger
+				</a>
+				<section class='receipt'>
+					<h2>
+						{{ model.store.name }}
+					</h2>
+					<time datetime="{{ model.date }}">{{ model.date }}</time>
+					<table class="receipt__items">
+						{% for item in model.purchases.all %}
+							<tr class="receipt__item">
+								<td class="receipt__item__count">{{ item.amount }} x {{ item.size.size }} {{ item.size.unit }}</td>
+								<td class="receipt__item__product">
+									<span class="receipt__item__name">{{item.product.name}}</span>
+									<span class="receipt__item__brand">{{item.product.brand.name}}</span>
+								</td>
+								<td class="receipt__item__price">{{item.total_price|minor_currency}}</td>
+								<td class="receipt__item__discount">{%if item.discount > 0 %}{{item.discount|minor_currency}}{%endif%}</td>
+							<!-- <span class="account"></span> -->
+							</tr>
+						{% empty %}
+							<p>Du kjøpte ikkje noko.</p>
+						{% endfor %}
+					</table>
+				</section>
+			</div>
 		</main>
 	</div>
 {%endblock%}
