@@ -53,6 +53,7 @@ class Receipt(models.Model):
     date = models.DateTimeField()
     store = models.ForeignKey(Store,
                               on_delete=models.CASCADE)
+    picture = models.FileField(null=True, blank=True)
 
     def total_amount(self):
         return sum([x.total_price - x.discount
