@@ -7,6 +7,7 @@ class PurchaseInline(admin.TabularInline):
 
 
 class ReceiptAdmin(admin.ModelAdmin):
+    list_display = ['date', 'store', 'total_amount']
     fieldsets = [
         (
             None,
