@@ -9,6 +9,9 @@
 					href="{% url 'admin:app_receipt_change' model.id %}">
 					Rediger
 				</a>
+				{% if model.picture %}
+				<a class="attachment" href="{{model.picture.url}}">Vedlegg</a>
+				{% endif %}
 				<section class='receipt'>
 					<h2>
 						{{ model.store.name }}
