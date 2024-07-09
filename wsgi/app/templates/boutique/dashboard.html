@@ -4,22 +4,24 @@
 	<div class="panes">
 		<main class="pane">
 			<h1>Månadens kjøp</h1>
-			<div class='list receipt-list'>
+			<ul class='list receipt-list'>
 				{% for receipt in models %}
-					<a href="{%url 'receipt' receipt.id%}" class="list-item receipt-list__item">
-						<span class="store">{{ receipt.store.name }}</span>
-						<span class="date">{{ receipt.date|date }}</span>
-						<span class="total">{{ receipt.total_amount|currency }}</span>
-						<span class="count">{{ receipt.purchases.count }}</span>
-						<!-- <span class="account"></span> -->
+					<a href="{%url 'receipt' receipt.id%}">
+						<li class="list-item receipt-list__item">
+							<span class="store">{{ receipt.store.name }}</span>
+							<span class="date">{{ receipt.date|date }}</span>
+							<span class="total">{{ receipt.total_amount|currency }}</span>
+							<span class="count">{{ receipt.purchases.count }}</span>
+							<!-- <span class="account"></span> -->
+						</li>
 					</a>
 				{% empty %}
 					<p>Ingen kvitteringar.</p>
 				{% endfor %}
-				<a href="{% url 'admin:app_receipt_add' %}" class="btn">
-					Ny kvittering
-				</a>
-			</div>
+			</ul>
+			<a href="{% url 'admin:app_receipt_add' %}" class="btn">
+				Ny kvittering
+			</a>
 		</main>
 	</div>
 {%endblock%}
