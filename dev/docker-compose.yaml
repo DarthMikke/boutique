@@ -8,14 +8,13 @@ services:
     ports:
       - 8081:80
   django:
-    build: ./wsgi
-    pull_policy: always
+    image: ghcr.io/darthmikke/wsgi:0.0.1-b1
     volumes:
       - ../wsgi:/app
     command: runserver 0.0.0.0:5000
     # hostname: django
-  db:
-    image: postgres
+  # db:
+    # image: postgres
     # hostname: postgres
 networks:
   rproxy:
