@@ -11,6 +11,7 @@ services:
     image: ghcr.io/darthmikke/wsgi:0.0.1-b1
     volumes:
       - ../wsgi:/app
+      - ../public/media:/media
     command: runserver 0.0.0.0:5000
     # hostname: django
   # db:
