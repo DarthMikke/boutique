@@ -19,9 +19,6 @@ RUN rm -rf venv .env db.sqlite3
 RUN touch .env
 RUN mkdir -p $DB_NAME
 RUN rmdir $DB_NAME
-# RUN python -m venv venv
-# RUN source venv/bin/activate && pip3 install -r requirements.txt
-# RUN source venv/bin/activate && python3 manage.py migrate
 RUN pip3 install --root-user-action=ignore -r requirements.txt
 RUN python3 manage.py migrate
 
