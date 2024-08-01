@@ -8,7 +8,7 @@ services:
     ports:
       - 8081:80
   django:
-    image: ghcr.io/darthmikke/wsgi:0.0.1-b1
+    image: ghcr.io/darthmikke/wsgi:0.0.1-b5
     volumes:
       - ../wsgi:/app
       - ../public/media:/media
