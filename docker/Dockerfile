@@ -27,7 +27,7 @@ RUN python3 manage.py migrate
 
 RUN exit
 
-FROM ghcr.io/darthmikke/wsgi:fc3c109
+FROM ghcr.io/darthmikke/wsgi:0.0.1-b5
 
 LABEL org.opencontainers.image.source https://github.com/DarthMikke/boutique
 COPY --from=build /app /app
