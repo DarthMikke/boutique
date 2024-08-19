@@ -2,7 +2,7 @@
 
 CWD=$(pwd | sed 's/\//\n/g' | tail -n 1)
 
-if [ $CWD == "docker" ]
+if [ $CWD == "tools" ]
 then
 	cd ..
 fi
