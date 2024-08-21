@@ -14,6 +14,10 @@
       MEDIA_ROOT: "/app/uploads/"
       DB_NAME: "/db/db.sqlite3"
   tasks:
+    - name: Ensure project directory exists
+      ansible.builtin.file:
+        path: "{{ project_dir }}"
+        state: directory
     - name: Create the env file
       ansible.builtin.template:
         src: env.j2
