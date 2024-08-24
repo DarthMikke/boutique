@@ -2,12 +2,12 @@
 - name: Deploy to production
   hosts:
     - boutique
-  gather_facts: no
+  gather_facts: false
   vars:
     container_name: boutique
     project_dir: "/srv/boutique"
     envvars:
-      DJANGO_DEBUG: True
+      DJANGO_DEBUG: "True"
       SECRET_KEY: "django-insecure-lwyh*yitd$0=k3uo2)oiqz6()yqi4d9t9l-u!1#&caz6l43tfh"
       ALLOWED_HOSTS: "*"
       CSRF_TRUSTED_ORIGINS: "http://*:*"
@@ -18,14 +18,17 @@
       ansible.builtin.file:
         path: "{{ project_dir }}"
         state: directory
+        mode: "0775"
     - name: Create the env file
       ansible.builtin.template:
         src: env.j2
         dest: "{{ project_dir }}/.env"
+        mode: "0664"
     - name: Ensure database file exists
       ansible.builtin.file:
         path: "{{ project_dir }}/db.sqlite3"
         state: touch
+        mode: "0664"
     - name: Create container with new image
       community.docker.docker_container:
         name: "{{ container_name }}"
@@ -39,17 +42,17 @@
         detach: true
     - name: Migrate
       community.docker.docker_container_exec:
-        name: "{{ container_name }}"
+        container: "{{ container_name }}"
         command: migrate
     - name: Ensure a superuser exists
       community.docker.docker_container_exec:
-        name: "{{ container_name }}"
+        container: "{{ container_name }}"
         command: createsuperuser --username admin --email admin@example.com --noinput
-        environment:
-          - DJANGO_SUPERUSER_PASSWORD="password1234"
+        env:
+          DJANGO_SUPERUSER_PASSWORD: "password1234"
     - name: Copy static files
       community.docker.docker_container_exec:
-        name: "{{ container_name }}"
+        container: "{{ container_name }}"
         command: collectstatic
     - name: Start the app
       community.docker.docker_container:
