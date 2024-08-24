@@ -44,13 +44,13 @@
       community.docker.docker_container_exec:
         container: "{{ container_name }}"
         argv:
-          - entrypoint.sh
+          - /run.sh
           - migrate
     - name: Ensure a superuser exists
       community.docker.docker_container_exec:
         container: "{{ container_name }}"
         argv:
-          - entrypoint.sh
+          - /run.sh
           - createsuperuser
           - --username
           - admin
@@ -63,7 +63,7 @@
       community.docker.docker_container_exec:
         container: "{{ container_name }}"
         argv:
-          - entrypoint.sh
+          - /run.sh
           - collectstatic
     - name: Stop the app
       community.docker.docker_container:
