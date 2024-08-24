@@ -43,18 +43,33 @@
     - name: Migrate
       community.docker.docker_container_exec:
         container: "{{ container_name }}"
-        command: migrate
+        argv:
+          - entrypoint.sh
+          - migrate
     - name: Ensure a superuser exists
       community.docker.docker_container_exec:
         container: "{{ container_name }}"
-        command: createsuperuser --username admin --email admin@example.com --noinput
+        argv:
+          - entrypoint.sh
+          - createsuperuser
+          - --username
+          - admin
+          - --email
+          - admin@example.com
+          - --noinput
         env:
           DJANGO_SUPERUSER_PASSWORD: "password1234"
     - name: Copy static files
       community.docker.docker_container_exec:
         container: "{{ container_name }}"
-        command: collectstatic
-    - name: Start the app
+        argv:
+          - entrypoint.sh
+          - collectstatic
+    - name: Stop the app
+      community.docker.docker_container:
+        name: "{{ container_name }}"
+        state: stopped
+    - name: Restart the app
       community.docker.docker_container:
         name: "{{ container_name }}"
         state: started
