@@ -38,7 +38,7 @@
           - "{{ project_dir }}/db.sqlite3:{{ envvars.DB_NAME }}"
           - "{{ project_dir }}/public:/app/public"
         restart_policy: always
-        state: stopped
+        state: started
         detach: true
     - name: Migrate
       community.docker.docker_container_exec:
