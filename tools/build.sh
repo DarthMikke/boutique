@@ -11,7 +11,7 @@ TAG=ghcr.io/darthmikke/boutique:$(git log -n 1 --format="%h")
 
 docker build \
 	-t $TAG \
-	-f docker/Dockerfile \
+	-f tools/Dockerfile \
 	.
 
 echo "Built $TAG"
