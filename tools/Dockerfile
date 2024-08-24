@@ -1,4 +1,4 @@
-FROM ghcr.io/darthmikke/wsgi:0.0.1-b5 as env
+FROM ghcr.io/darthmikke/wsgi:0.0.1-b5 AS env
 
 ENV DJANGO_DEBUG=True
 ENV SECRET_KEY="django-insecure-lwyh*yitd$0=k3uo2)oiqz6()yqi4d9t9l-u!1#&caz6l43tfh"
@@ -27,7 +27,7 @@ RUN python3 manage.py migrate
 
 FROM env
 
-LABEL org.opencontainers.image.source https://github.com/DarthMikke/boutique
+LABEL org.opencontainers.image.source=https://github.com/DarthMikke/boutique
 COPY --from=build /app /app
 COPY --from=build /db /db
 
