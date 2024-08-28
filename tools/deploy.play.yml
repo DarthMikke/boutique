@@ -45,6 +45,8 @@
           - "{{ project_dir }}/db.sqlite3:{{ envvars.DB_NAME }}"
           - "{{ public_dir }}:/app/public"
         restart_policy: always
+        networks:
+          - rproxy
         state: started
         detach: true
     - name: Migrate
