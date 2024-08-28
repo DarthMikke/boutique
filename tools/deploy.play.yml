@@ -46,7 +46,7 @@
           - "{{ public_dir }}:/app/public"
         restart_policy: always
         networks:
-          - rproxy
+          - name: rproxy
         state: started
         detach: true
     - name: Migrate
