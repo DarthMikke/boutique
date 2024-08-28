@@ -66,6 +66,7 @@
           - --noinput
         env:
           DJANGO_SUPERUSER_PASSWORD: "password1234"
+      ignore_errors: true
     - name: Copy static files
       community.docker.docker_container_exec:
         container: "{{ container_name }}"
