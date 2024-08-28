@@ -76,6 +76,7 @@
         argv:
           - /run.sh
           - collectstatic
+          - --noinput
     - name: Stop the app
       community.docker.docker_container:
         name: "{{ container_name }}"
