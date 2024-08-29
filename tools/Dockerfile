@@ -1,6 +1,8 @@
 FROM ghcr.io/darthmikke/wsgi:0.0.1-b5 AS base
 
-FROM base as build
+FROM base AS build
+
+ARG DB_NAME
 
 RUN apk add openssh git bash python3 py3-pip gcc python3-dev musl-dev
 
