@@ -39,7 +39,7 @@
     - name: Create container with new image
       community.docker.docker_container:
         name: "{{ container_name }}"
-        image: ghcr.io/darthmikke/boutique:0.0.1-a3
+        image: ghcr.io/darthmikke/boutique:0.0.1-a4
         volumes:
           - "{{ project_dir }}/.env:/app/.env"
           - "{{ project_dir }}/db.sqlite3:{{ envvars.DB_NAME }}"
