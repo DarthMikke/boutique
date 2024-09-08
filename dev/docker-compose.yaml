@@ -12,7 +12,7 @@ services:
     volumes:
       - ../wsgi:/app
       - ../public/media:/media
-    command: runserver 0.0.0.0:5000
+    command: runserver 0.0.0.0:8000
     # hostname: django
   # db:
     # image: postgres
