@@ -17,6 +17,7 @@ env_file_path = os.path.join(
 )
 print(f"Loading .env file from {env_file_path}")
 dotenv.read_dotenv(env_file_path)
+print(repr(os.environ))
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'boutique.settings')
 
