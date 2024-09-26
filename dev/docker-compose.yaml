@@ -8,14 +8,17 @@ services:
     ports:
       - 8081:80
   django:
-    image: ghcr.io/darthmikke/wsgi:0.0.1-b5
+    image: ghcr.io/darthmikke/wsgi:0.0.1-b7
     volumes:
       - ../wsgi:/app
       - ../public/media:/media
-    command: runserver 0.0.0.0:8000
+      - django_venv:/venv
+    command: runserver 0.0.0.0:5000
     # hostname: django
   # db:
     # image: postgres
     # hostname: postgres
+volumes:
+  django_venv:
 networks:
   rproxy:

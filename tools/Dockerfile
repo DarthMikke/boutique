@@ -1,4 +1,4 @@
-FROM ghcr.io/darthmikke/wsgi:0.0.1-b5 AS base
+FROM ghcr.io/darthmikke/wsgi:0.0.1-b7 AS base
 
 FROM base AS build
 
@@ -17,7 +17,7 @@ RUN rm -rf venv .env db.sqlite3
 COPY tools/sample.env .env
 RUN mkdir -p $DB_NAME
 RUN rmdir $DB_NAME
-RUN pip3 install --root-user-action=ignore -r requirements.txt
+RUN pip3 install -r requirements.txt
 RUN python3 manage.py migrate
 
 FROM base
@@ -25,6 +25,7 @@ FROM base
 LABEL org.opencontainers.image.source=https://github.com/DarthMikke/boutique
 COPY --from=build /app /app
 COPY --from=build /db /db
+COPY --from=build /venv /venv
 
 WORKDIR /app
 RUN pip3 install --root-user-action=ignore -r requirements.txt
