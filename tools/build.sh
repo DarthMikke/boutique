@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-source sample.env
-
 CWD=$(pwd | sed 's/\//\n/g' | tail -n 1)
 
 if [ $CWD == "tools" ]
 then
 	cd ..
 fi
+
+source tools/sample.env
 
 TAG=ghcr.io/darthmikke/boutique:$(git log -n 1 --format="%h")
 
