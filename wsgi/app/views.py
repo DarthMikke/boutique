@@ -5,6 +5,7 @@ from .rest_additions import TemplateListView, TemplateView
 from django.http import HttpResponse
 
 from .models import Receipt
+from .forms import ReceiptForm
 
 # Create your views here.
 
@@ -29,3 +30,12 @@ class ReceiptView(TemplateView):
     template_name = "boutique/receipt.html"
     model = Receipt
     identifiers = [('id', 'receipt_id')]
+
+class ReceiptNewView(TemplateView):
+    template_name = "boutique/receipt_edit.html"
+    identifiers = []
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = ReceiptForm()
+        return context
