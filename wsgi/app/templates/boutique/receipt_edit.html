@@ -1,0 +1,65 @@
+{%extends "boutique/base.html" %}
+{%load boutique%}
+{%load static%}
+{%block content%}
+	<div class="panes">
+		<main class="pane">
+			<div id="receipt-main">
+				
+				<section class='receipt'>
+					<form action="{% url 'receipt_new' %}" method="post">
+						{% csrf_token %}
+						{{ form }}
+						<a href="{% url 'admin:app_store_add' %}">Add store</a>
+						<input type="submit" name="action" value="Send to Azure">
+
+						<!--
+						 thank you @adandan01
+						 https://medium.com/@adandan01/django-inline-formsets-example-mybook-420cc4b6225d
+						 -->
+						{{ formset.management_form }}
+						<table class="table">
+						{% for form in formset.forms %}
+							{% if forloop.first %}
+								<thead>
+								<tr>
+									{% for field in form.visible_fields %}
+										<th>{{ field.label|capfirst }}</th>
+									{% endfor %}
+								</tr>
+								</thead>
+							{% endif %}
+							<tr class="formset_row">
+								{% for field in form.visible_fields %}
+									<td>
+										{# Include the hidden fields in the form #}
+										{% if forloop.first %}
+											{% for hidden in form.hidden_fields %}
+												{{ hidden }}
+											{% endfor %}
+										{% endif %}
+										{{ field.errors.as_ul }}
+										{{ field }}
+									</td>
+								{% endfor %}
+							</tr>
+						{% endfor %}
+						</table>
+						<a href="{% url 'admin:app_product_add' %}">Add store</a>
+						<input type="submit" value="Save" />
+					</form>
+				</section>
+			</div>
+		</main>
+	</div>
+
+<script src="{% static 'jquery.min.js' %}"></script>
+<script src="{% static 'formset/jquery.formset.js' %}"></script>
+<script type="text/javascript">
+	$('.formset_row').formset({
+		addText: 'add receipt item',
+		deleteText: 'remove',
+		prefix: 'purchases'
+	});
+</script>
+{%endblock%}
