@@ -1,0 +1,15 @@
+{%extends "boutique/base.html" %}
+{%load boutique%}
+{%load static%}
+{%block content%}
+	<div class="panes">
+		<main class="pane">
+			<form action="{% url 'receipt_upload' %}" method="post">
+				{% csrf_token %}
+				{{ form }}
+				<input type="submit" value="Save" />
+			</form>
+		</main>
+	</div>
+
+{%endblock%}

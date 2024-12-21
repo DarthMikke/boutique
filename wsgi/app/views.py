@@ -55,3 +55,24 @@ class ReceiptNewView(TemplateView):
         print(repr(context['formset']))
         print(repr(context['formset'].management_form))
         return context
+
+
+class ReceiptUploadView(TemplateView):
+    template_name = "boutique/receipt_upload.html"
+    identifiers = []
+
+    def post(self, request):
+        form = ReceiptForm(request.POST)
+        return HttpResponse(repr(form), content_type='text/plain')
+
+        if form.is_valid():
+            form.save()
+            # Start analyzing
+            return HttpResponse(status=302, headers={
+                "location": reverse('dashboard')
+            })
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = ReceiptForm()
+        return context
