@@ -1,6 +1,7 @@
 from django.forms import ModelForm, inlineformset_factory
 from .models import Receipt, Purchase
 
+
 class ReceiptForm(ModelForm):
     class Meta:
         model = Receipt
@@ -9,6 +10,7 @@ class ReceiptForm(ModelForm):
             'date',
             'store',
         ]
+
 
 PurchaseFormSet = inlineformset_factory(
     Receipt,
