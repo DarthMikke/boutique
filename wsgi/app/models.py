@@ -50,10 +50,12 @@ class ProductSize(models.Model):
 
 
 class Receipt(models.Model):
-    date = models.DateTimeField()
+    date = models.DateTimeField(null=True, blank=True)
     store = models.ForeignKey(Store,
-                              on_delete=models.CASCADE)
+                              on_delete=models.CASCADE,
+                              null=True, blank=True)
     picture = models.FileField(null=True, blank=True)
+    analyzed = models.FileField(null=True, blank=True)
 
     def total_amount(self):
         return sum([x.total_price - x.discount
