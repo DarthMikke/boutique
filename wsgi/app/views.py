@@ -5,7 +5,7 @@ from .rest_additions import TemplateListView, TemplateView
 from django.http import HttpResponse
 
 from .models import Receipt
-from .forms import ReceiptForm, PurchaseFormSet
+from .forms import ReceiptForm, PurchaseFormSet, ReceiptScanUploadForm
 
 # Create your views here.
 
@@ -39,7 +39,7 @@ class ReceiptNewView(TemplateView):
     identifiers = []
 
     def post(self, request):
-        form = ReceiptForm(request.POST)
+        form = ReceiptForm(request.POST, request.FILES)
         return HttpResponse(repr(form), content_type='text/plain')
 
         if form.is_valid():
@@ -62,17 +62,18 @@ class ReceiptUploadView(TemplateView):
     identifiers = []
 
     def post(self, request):
-        form = ReceiptForm(request.POST)
-        return HttpResponse(repr(form), content_type='text/plain')
+        form = ReceiptScanUploadForm(request.POST, request.FILES)
+        valid = form.is_valid()
 
-        if form.is_valid():
+        if valid:
             form.save()
             # Start analyzing
             return HttpResponse(status=302, headers={
                 "location": reverse('dashboard')
             })
+        return HttpResponse(repr(form), status=500, content_type='text/plain')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = ReceiptForm()
+        context['form'] = ReceiptScanUploadForm()
         return context

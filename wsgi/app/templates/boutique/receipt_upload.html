@@ -4,9 +4,9 @@
 {%block content%}
 	<div class="panes">
 		<main class="pane">
-			<form action="{% url 'receipt_upload' %}" method="post">
+			<form action="{% url 'receipt_upload' %}" method="post" enctype="multipart/form-data">
 				{% csrf_token %}
-				{{ form }}
+				<input type="file" name="picture" required />
 				<input type="submit" value="Save" />
 			</form>
 		</main>
