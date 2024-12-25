@@ -1,0 +1,43 @@
+from django.shortcuts import render
+from django.http import HttpResponse, JsonResponse
+from django.urls import reverse
+from app.rest_additions import TemplateView
+from app.models import Receipt
+from app.forms import ReceiptScanUploadForm
+
+from azure.core.credentials import AzureKeyCredential
+from azure.ai.documentintelligence import DocumentIntelligenceClient
+from azure.ai.documentintelligence.models import AnalyzeResult
+
+
+class ReceiptUploadView(TemplateView):
+    template_name = "boutique/receipt_upload.html"
+    identifiers = []
+
+    def post(self, request):
+        form = ReceiptScanUploadForm(request.POST, request.FILES)
+        valid = form.is_valid()
+
+        if valid:
+            receipt: Receipt = form.save()
+
+            # Start analyzing
+            document_intelligence_client = DocumentIntelligenceClient(
+                endpoint, credential
+            )
+            with open(receipt.picture.path, 'rb') as f:
+                print("Started analyzing")
+                poller = document_intelligence_client.begin_analyze_document(
+                    "prebuilt-receipt", body=f, locale="no-NO"
+                )
+                receipts: AnalyzeResult = poller.result()
+            return JsonResponse(receipts.as_dict())
+            return HttpResponse(status=302, headers={
+                "location": reverse('dashboard')
+            })
+        return HttpResponse(repr(form), status=500, content_type='text/plain')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = ReceiptScanUploadForm()
+        return context
