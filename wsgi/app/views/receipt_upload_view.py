@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
+from django.core.files.base import ContentFile
+
 from app.rest_additions import TemplateView
 from app.models import Receipt
 from app.forms import ReceiptScanUploadForm
@@ -8,6 +10,8 @@ from app.forms import ReceiptScanUploadForm
 from azure.core.credentials import AzureKeyCredential
 from azure.ai.documentintelligence import DocumentIntelligenceClient
 from azure.ai.documentintelligence.models import AnalyzeResult
+import json
+import uuid
 
 
 class ReceiptUploadView(TemplateView):
@@ -30,8 +34,15 @@ class ReceiptUploadView(TemplateView):
                 poller = document_intelligence_client.begin_analyze_document(
                     "prebuilt-receipt", body=f, locale="no-NO"
                 )
+                analyzed_path = str(uuid.uuid4()) + '.json'
                 receipts: AnalyzeResult = poller.result()
-            return JsonResponse(receipts.as_dict())
+
+            receipt.analyzed.save(
+                analyzed_path,
+                ContentFile(json.dumps(receipts.as_dict()))
+            )
+            receipt.save()
+
             return HttpResponse(status=302, headers={
                 "location": reverse('dashboard')
             })
