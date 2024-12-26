@@ -46,6 +46,8 @@ class ReceiptUploadView(TemplateView):
         )
         receipt.save()
 
+        receipt.analyze()
+
         return HttpResponse(status=302, headers={
             "location": reverse('dashboard')
         })

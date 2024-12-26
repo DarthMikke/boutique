@@ -1,4 +1,5 @@
 from django.db import models
+import json
 
 # Create your models here.
 
@@ -66,6 +67,24 @@ class Receipt(models.Model):
             self.total_amount(),
             self.date
         )
+
+    def analyze(self):
+        # TODO: Check if self.analyzed is null. If it is the case, check
+        # if there's a picture, and upload it to Azure.
+
+        analyzed = AnalyzedReceipt.objects.get_or_create(receipt=self)
+
+        with open(self.analyzed.path) as f:
+            result = json.load(self.analyzed.path)
+
+        if 'documents' in result.keys() and len(result['documents']) > 0:
+            fields = result['documents'][0]['fields']
+            if 'MerchantName' in fields.keys():
+                alias, created = AnalyzedStoreAlias.objects.get_or_create(
+                    name=fields['MerchantName'])
+                analyzed.store = alias
+
+        analyzed.save()
 
 
 class Purchase(models.Model):
