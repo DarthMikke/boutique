@@ -22,31 +22,33 @@ class ReceiptUploadView(TemplateView):
         form = ReceiptScanUploadForm(request.POST, request.FILES)
         valid = form.is_valid()
 
-        if valid:
-            receipt: Receipt = form.save()
+        if not valid:
+            return HttpResponse(repr(form), status=500,
+                                content_type='text/plain')
 
-            # Start analyzing
-            document_intelligence_client = DocumentIntelligenceClient(
-                endpoint, credential
+        receipt: Receipt = form.save()
+
+        # Start analyzing
+        document_intelligence_client = DocumentIntelligenceClient(
+            endpoint, credential
+        )
+        with open(receipt.picture.path, 'rb') as f:
+            print("Started analyzing")
+            poller = document_intelligence_client.begin_analyze_document(
+                "prebuilt-receipt", body=f, locale="no-NO"
             )
-            with open(receipt.picture.path, 'rb') as f:
-                print("Started analyzing")
-                poller = document_intelligence_client.begin_analyze_document(
-                    "prebuilt-receipt", body=f, locale="no-NO"
-                )
-                analyzed_path = str(uuid.uuid4()) + '.json'
-                receipts: AnalyzeResult = poller.result()
+            analyzed_path = str(uuid.uuid4()) + '.json'
+            receipts: AnalyzeResult = poller.result()
 
-            receipt.analyzed.save(
-                analyzed_path,
-                ContentFile(json.dumps(receipts.as_dict()))
-            )
-            receipt.save()
+        receipt.analyzed.save(
+            analyzed_path,
+            ContentFile(json.dumps(receipts.as_dict()))
+        )
+        receipt.save()
 
-            return HttpResponse(status=302, headers={
-                "location": reverse('dashboard')
-            })
-        return HttpResponse(repr(form), status=500, content_type='text/plain')
+        return HttpResponse(status=302, headers={
+            "location": reverse('dashboard')
+        })
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
