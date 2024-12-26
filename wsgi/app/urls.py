@@ -22,6 +22,8 @@ urlpatterns = [
     path('receipts/new', ReceiptNewView.as_view(), name='receipt_new'),
     path('receipts/upload', ReceiptUploadView.as_view(), name='receipt_upload'),
     path('receipts/<receipt_id>', ReceiptView.as_view(), name='receipt'),
+    path('receipts/analyze/<receipt_id>', ReceiptView.as_view(),
+         name='receipt_analyze'),
     # path('accounts', BankAccountList, name='bank_account_list'),
     # path('accounts/add', BankAccountAdd, name='bank_add'),
     # path('accounts/<account_id>', BankAccount, name='bank_account'),
