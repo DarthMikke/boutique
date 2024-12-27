@@ -139,3 +139,8 @@ class AnalyzedReceipt(models.Model):
     store = models.ForeignKey(AnalyzedStoreAlias, on_delete=models.SET_NULL,
                               null=True, blank=True)
     total_amount = models.IntegerField(null=True, blank=True)
+
+    def as_dict(self):
+        serialized = {k: repr(self.__dict__[k])
+                      for k in self.__dict__.keys()}
+        return json.dumps(serialized, indent=4)
