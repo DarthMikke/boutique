@@ -1,5 +1,6 @@
 from django.db import models
 import json
+from datetime import datetime
 
 # Create your models here.
 
@@ -72,17 +73,28 @@ class Receipt(models.Model):
         # TODO: Check if self.analyzed is null. If it is the case, check
         # if there's a picture, and upload it to Azure.
 
-        analyzed = AnalyzedReceipt.objects.get_or_create(receipt=self)
+        analyzed, created = AnalyzedReceipt.objects.get_or_create(receipt=self)
 
         with open(self.analyzed.path) as f:
-            result = json.load(self.analyzed.path)
+            result = json.load(f)
 
         if 'documents' in result.keys() and len(result['documents']) > 0:
             fields = result['documents'][0]['fields']
             if 'MerchantName' in fields.keys():
                 alias, created = AnalyzedStoreAlias.objects.get_or_create(
-                    name=fields['MerchantName'])
+                    name=fields['MerchantName']['valueString'])
                 analyzed.store = alias
+            if 'TransactionDate' in fields.keys():
+                transaction_tstamp = (
+                    fields['TransactionDate']['valueDate'],
+                    fields['TransactionTime']['valueTime']
+                    if 'TransactionTime' in fields.keys()
+                    else '12:00:00'
+                )
+                transaction_dt = datetime.fromisoformat(
+                    "%s %s" % transaction_tstamp
+                )
+                analyzed.date = transaction_dt
 
         analyzed.save()
 
