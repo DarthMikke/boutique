@@ -79,3 +79,22 @@ class Purchase(models.Model):
     discount = models.IntegerField()
     receipt = models.ForeignKey(Receipt, related_name="purchases",
                                 on_delete=models.CASCADE)
+
+
+class AnalyzedStoreAlias(models.Model):
+    """
+    Associates an analyzed MerchantName with appropriate Store.
+    """
+    name = models.CharField(max_length=250)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE,
+                              null=True, blank=True)
+
+
+class AnalyzedReceipt(models.Model):
+    receipt = models.OneToOneField(Receipt, on_delete=models.SET_NULL,
+                                   null=True, blank=True,
+                                   related_name="analyzed_receipt")
+    date = models.DateTimeField(null=True, blank=True)
+    store = models.ForeignKey(AnalyzedStoreAlias, on_delete=models.SET_NULL,
+                              null=True, blank=True)
+    total_amount = models.IntegerField(null=True, blank=True)
