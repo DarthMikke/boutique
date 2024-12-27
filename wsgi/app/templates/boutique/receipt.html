@@ -11,7 +11,7 @@
 				</a>
 				{% if model.picture %}
 				<a class="attachment" href="{{model.picture.url}}">Vedlegg</a>
-				<a class="analyze" href="{% url 'receipt_analyze' %}">Analyser</a>
+				<a class="analyze" href="{% url 'receipt_analyze' model.id %}">Analyser</a>
 				{% endif %}
 				<section class='receipt'>
 					<h2>

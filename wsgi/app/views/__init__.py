@@ -35,6 +35,21 @@ class ReceiptView(TemplateView):
     identifiers = [('id', 'receipt_id')]
 
 
+class ReceiptAnalyzeView(TemplateView):
+    template_name = "boutique/receipt.html"
+    model = Receipt
+    identifiers = [('id', 'receipt_id')]
+
+    # TODO Should be POST, not GET
+    def get(self, request, **kwargs):
+        super().get(request, **kwargs)
+        self.instance.analyze()
+
+        return HttpResponse(status=302, headers={
+            "location": reverse('receipt', kwargs={'receipt_id': self.instance.id})
+        })
+
+
 class ReceiptNewView(TemplateView):
     template_name = "boutique/receipt_edit.html"
     identifiers = []
