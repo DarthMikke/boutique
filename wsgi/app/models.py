@@ -59,6 +59,16 @@ class Receipt(models.Model):
     picture = models.FileField(null=True, blank=True)
     analyzed = models.FileField(null=True, blank=True)
 
+    def get_date(self):
+        return self.date if self.date is not None \
+            else self.analyzed_receipt.date
+
+    def get_store(self):
+        return self.store if self.store is not None \
+            else (self.analyzed_receipt.store.store
+                  if self.analyzed_receipt.store is not None
+                  else None)
+
     def total_amount(self):
         return sum([x.total_price - x.discount
                     for x in self.purchases.all()])/100.0

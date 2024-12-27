@@ -15,9 +15,9 @@
 				{% endif %}
 				<section class='receipt'>
 					<h2>
-						{{ model.store.name }}
+						{{ model.get_store.name }}
 					</h2>
-					<time datetime="{{ model.date }}">{{ model.date }}</time>
+					<time datetime="{{ model.date }}">{{ model.get_date }}</time>
 					<table class="receipt__items">
 						{% for item in model.purchases.all %}
 							<tr class="receipt__item">
