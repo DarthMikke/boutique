@@ -105,6 +105,9 @@ class Receipt(models.Model):
                     "%s %s" % transaction_tstamp
                 )
                 analyzed.date = transaction_dt
+            if 'Total' in fields.keys():
+                analyzed.total_amount = float(fields['Total']['valueCurrency']['amount'])
+                analyzed.currency = fields['Total']['valueCurrency']['currencyCode']
 
         analyzed.save()
 
@@ -138,7 +141,8 @@ class AnalyzedReceipt(models.Model):
     date = models.DateTimeField(null=True, blank=True)
     store = models.ForeignKey(AnalyzedStoreAlias, on_delete=models.SET_NULL,
                               null=True, blank=True)
-    total_amount = models.IntegerField(null=True, blank=True)
+    total_amount = models.DecimalField(max_digits=7, decimal_places=3)
+    currency = models.CharField(max_length=10, null=True, blank=True)
 
     def as_dict(self):
         serialized = {k: repr(self.__dict__[k])
