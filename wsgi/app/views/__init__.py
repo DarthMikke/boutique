@@ -46,7 +46,8 @@ class ReceiptAnalyzeView(TemplateView):
         self.instance.analyze()
 
         return HttpResponse(status=302, headers={
-            "location": reverse('receipt', kwargs={'receipt_id': self.instance.id})
+            "location": reverse('receipt',
+                                kwargs={'receipt_id': self.instance.id})
         })
 
 
