@@ -64,12 +64,13 @@ class Receipt(models.Model):
         return self.date if self.date is not None \
             else self.analyzed_receipt.date
 
-    def get_store(self):
-        return self.store if self.store is not None \
-            else (self.analyzed_receipt.store.store
-                  if hasattr(self, 'analyzed_receipt')
-                  and self.analyzed_receipt.store is not None
-                  else None)
+    def get_store_name(self):
+        if self.store is not None:
+            return self.store
+        if hasattr(self, 'analyzed_receipt'):
+            return (self.analyzed_receipt.store.store
+                    if self.analyzed_receipt.store.store is not None
+                    else self.analyzed_receipt.store.name)
 
     def total_amount(self):
         return self.analyzed_receipt.total_amount \
