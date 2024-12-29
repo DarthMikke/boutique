@@ -146,7 +146,8 @@ class AnalyzedReceipt(models.Model):
     date = models.DateTimeField(null=True, blank=True)
     store = models.ForeignKey(AnalyzedStoreAlias, on_delete=models.SET_NULL,
                               null=True, blank=True)
-    total_amount = models.DecimalField(max_digits=7, decimal_places=3)
+    total_amount = models.DecimalField(max_digits=7, decimal_places=3,
+                                       null=True, blank=True)
     currency = models.CharField(max_length=10, null=True, blank=True)
 
     def as_dict(self):
