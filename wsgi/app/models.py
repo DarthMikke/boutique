@@ -60,9 +60,26 @@ class Receipt(models.Model):
     picture = models.FileField(null=True, blank=True)
     analyzed = models.FileField(null=True, blank=True)
 
+    def get_date_extended(self):
+        """
+        Return a tuple of `datetime` associated with this receipt and a boolean
+        of whether the datetime was imported through Azure.
+        """
+        return (self.date, False) if self.date is not None \
+            else (self.analyzed_receipt.date, True)
+
     def get_date(self):
-        return self.date if self.date is not None \
-            else self.analyzed_receipt.date
+        return self.get_date_extended()[0]
+
+    @property
+    def date_admin(self):
+        (dtg, imported) = self.get_date_extended()
+        templates = ['%s', '%s*']
+
+        if dtg is not None:
+            ret = (templates[imported] % dtg.strftime('%d %h %Y %H:%M')) if dtg is not None \
+                else None
+            return ret
 
     def get_store_name(self):
         if self.store is not None:
