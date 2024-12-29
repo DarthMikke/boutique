@@ -4,7 +4,7 @@
 	<div class="panes">
 		<main class="pane">
 			<div id="receipt-main">
-				<h1>{{model.total_amount}}, {{ model.store.name }}</h1>
+				<h1>{{model.total_amount}}, {{ model.get_store.name }}</h1>
 				<a class="edit" id="edit_receipt"
 					href="{% url 'admin:app_receipt_change' model.id %}">
 					Rediger
@@ -17,7 +17,7 @@
 					<h2>
 						{{ model.get_store.name }}
 					</h2>
-					<time datetime="{{ model.date }}">{{ model.get_date }}</time>
+					<time datetime="{{ model.get_date }}">{{ model.get_date }}</time>
 					<table class="receipt__items">
 						{% for item in model.purchases.all %}
 							<tr class="receipt__item">

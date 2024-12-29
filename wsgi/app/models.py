@@ -52,8 +52,9 @@ class ProductSize(models.Model):
 
 
 class Receipt(models.Model):
-    date = models.DateTimeField(null=True, blank=True)
-    store = models.ForeignKey(Store,
+    date = models.DateTimeField(name='date', db_column='date',
+                                null=True, blank=True)
+    store = models.ForeignKey(Store, name='store', db_column='store',
                               on_delete=models.CASCADE,
                               null=True, blank=True)
     picture = models.FileField(null=True, blank=True)
@@ -66,12 +67,16 @@ class Receipt(models.Model):
     def get_store(self):
         return self.store if self.store is not None \
             else (self.analyzed_receipt.store.store
-                  if self.analyzed_receipt.store is not None
+                  if hasattr(self, 'analyzed_receipt')
+                  and self.analyzed_receipt.store is not None
                   else None)
 
     def total_amount(self):
-        return sum([x.total_price - x.discount
-                    for x in self.purchases.all()])/100.0
+        return self.analyzed_receipt.total_amount \
+            if hasattr(self, 'analyzed_receipt') \
+            and self.analyzed_receipt.total_amount is not None \
+            else sum([x.total_price - x.discount
+                     for x in self.purchases.all()])/100.0
 
     def __str__(self):
         return "%.2f kr, %s" % (
