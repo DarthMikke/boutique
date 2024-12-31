@@ -4,19 +4,23 @@
 	<div class="panes">
 		<main class="pane">
 			<div id="receipt-main">
-				<h1>{{model.total_amount}}, {{ model.store.name }}</h1>
+					<h1>{{model.total_amount|currency}}, {{ model.get_store_name }}</h1>
 				<a class="edit" id="edit_receipt"
 					href="{% url 'admin:app_receipt_change' model.id %}">
 					Rediger
 				</a>
 				{% if model.picture %}
 				<a class="attachment" href="{{model.picture.url}}">Vedlegg</a>
+				<a class="analyze" href="{% url 'receipt_analyze' model.id %}">Analyser</a>
+				{% endif %}
+				{% if debug %}
+				{{ model.analyzed_receipt.as_dict }}
 				{% endif %}
 				<section class='receipt'>
 					<h2>
-						{{ model.store.name }}
+						{{ model.get_store_name }}
 					</h2>
-					<time datetime="{{ model.date }}">{{ model.date }}</time>
+					<time datetime="{{ model.get_date }}">{{ model.get_date }}</time>
 					<table class="receipt__items">
 						{% for item in model.purchases.all %}
 							<tr class="receipt__item">

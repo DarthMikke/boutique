@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic.base import View
-from .rest_additions import TemplateListView, TemplateView
+from app.rest_additions import TemplateListView, TemplateView
 from django.http import HttpResponse
 
-from .models import Receipt
-from .forms import ReceiptForm, PurchaseFormSet
+from app.models import Receipt
+from app.forms import ReceiptForm, PurchaseFormSet, ReceiptScanUploadForm
+from .receipt_upload_view import ReceiptUploadView
 
 # Create your views here.
 
@@ -34,12 +35,28 @@ class ReceiptView(TemplateView):
     identifiers = [('id', 'receipt_id')]
 
 
+class ReceiptAnalyzeView(TemplateView):
+    template_name = "boutique/receipt.html"
+    model = Receipt
+    identifiers = [('id', 'receipt_id')]
+
+    # TODO Should be POST, not GET
+    def get(self, request, **kwargs):
+        super().get(request, **kwargs)
+        self.instance.analyze()
+
+        return HttpResponse(status=302, headers={
+            "location": reverse('receipt',
+                                kwargs={'receipt_id': self.instance.id})
+        })
+
+
 class ReceiptNewView(TemplateView):
     template_name = "boutique/receipt_edit.html"
     identifiers = []
 
     def post(self, request):
-        form = ReceiptForm(request.POST)
+        form = ReceiptForm(request.POST, request.FILES)
         return HttpResponse(repr(form), content_type='text/plain')
 
         if form.is_valid():

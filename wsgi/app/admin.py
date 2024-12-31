@@ -7,7 +7,7 @@ class PurchaseInline(admin.TabularInline):
 
 
 class ReceiptAdmin(admin.ModelAdmin):
-    list_display = ['date', 'store', 'total_amount']
+    list_display = ['date_admin', 'store', 'total_amount']
     fieldsets = [
         ( None, {
             "fields": ['picture', ],
@@ -34,3 +34,4 @@ admin.site.register(Brand)
 admin.site.register(ProductSize)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Receipt, ReceiptAdmin)
+admin.site.register(AnalyzedStoreAlias)
