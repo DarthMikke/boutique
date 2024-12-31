@@ -7,6 +7,8 @@ from app.rest_additions import TemplateView
 from app.models import Receipt
 from app.forms import ReceiptScanUploadForm
 
+import os
+
 from azure.core.credentials import AzureKeyCredential
 from azure.ai.documentintelligence import DocumentIntelligenceClient
 from azure.ai.documentintelligence.models import AnalyzeResult
@@ -27,6 +29,9 @@ class ReceiptUploadView(TemplateView):
                                 content_type='text/plain')
 
         receipt: Receipt = form.save()
+
+        endpoint = os.environ['AZURE_ENDPOINT']
+        credential = AzureKeyCredential(os.environ['AZURE_KEY'])
 
         # Start analyzing
         document_intelligence_client = DocumentIntelligenceClient(
