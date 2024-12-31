@@ -57,6 +57,7 @@ class ReceiptNewView(TemplateView):
 
     def post(self, request):
         form = ReceiptForm(request.POST, request.FILES)
+        # TODO A nice form
         return HttpResponse(repr(form), content_type='text/plain')
 
         if form.is_valid():
@@ -69,6 +70,4 @@ class ReceiptNewView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['form'] = ReceiptForm()
         context['formset'] = PurchaseFormSet(initial=[{'quantity': 1}])
-        print(repr(context['formset']))
-        print(repr(context['formset'].management_form))
         return context

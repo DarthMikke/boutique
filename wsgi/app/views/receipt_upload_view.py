@@ -25,6 +25,7 @@ class ReceiptUploadView(TemplateView):
         valid = form.is_valid()
 
         if not valid:
+            # TODO nice error message
             return HttpResponse(repr(form), status=500,
                                 content_type='text/plain')
 
