@@ -77,8 +77,8 @@ class Receipt(models.Model):
         templates = ['%s', '%s*']
 
         if dtg is not None:
-            ret = (templates[imported] % dtg.strftime('%d %h %Y %H:%M')) if dtg is not None \
-                else None
+            ret = (templates[imported] % dtg.strftime('%d %h %Y %H:%M')) \
+                if dtg is not None else None
             return ret
 
     def get_store_name(self):
