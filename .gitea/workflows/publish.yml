@@ -3,6 +3,8 @@ name: Test, build and publish
 
 on:
   push:
+    branches:
+      - cicd
     tags:
       - "*"
 jobs:
