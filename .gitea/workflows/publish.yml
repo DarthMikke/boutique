@@ -16,6 +16,10 @@ jobs:
     steps:
       - name: Install Git
         run: apt install git
+      - name: Configure access to private repos
+        run: |
+          git config credential.helper store
+          echo "https://$GH_USER:$GH_TOKEN@github.com" > ~/.git-credentials
       - name: Checkout the repo
         run: |
           echo Checking out to $(pwd)
