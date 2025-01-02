@@ -28,7 +28,7 @@ jobs:
           git clone --depth=1 $URL/${{gitea.repository}} boutique
           cd boutique
           git fetch
-          git checkout ${{gitea.ref}}
+          git checkout ${{gitea.ref_name}}
           git submodule update --init --recursive
       - name: Install Docker
         run: |
