@@ -22,6 +22,7 @@ jobs:
           echo "https://$GH_USER:$GH_TOKEN@github.com" > ~/.git-credentials
       - name: Checkout the repo
         run: |
+          git config -l --show-scope
           echo Checking out to $(pwd)
           set -x
           URL=$(echo ${{gitea.server_url}} | sed 's/:\/\//:\/\/oauth:${{gitea.token}}@/')
