@@ -27,6 +27,7 @@ jobs:
           URL=$(echo ${{gitea.server_url}} | sed 's/:\/\//:\/\/oauth:${{gitea.token}}@/')
           git clone --depth=1 $URL/${{gitea.repository}} boutique
           cd boutique
+          git checkout ${{gitea.ref}}
           git submodule update --init --recursive
       - name: Install Docker
         run: |
