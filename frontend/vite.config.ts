@@ -9,7 +9,7 @@ export default defineConfig({
         style: 'src/style.scss',
       },
       output: {
-        dir: "../public",
+        dir: "../wsgi/app/static/assets",
         assetFileNames: "[name].[ext]",
         entryFileNames: "[name].js",
       }

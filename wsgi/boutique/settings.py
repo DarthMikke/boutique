@@ -119,9 +119,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / "public" / "static"
-MEDIA_ROOT = '/media'
+STATIC_URL = '/static/'
+STATIC_ROOT = "/public/static"
+MEDIA_ROOT = '/public/media'
 MEDIA_URL = '/media/'
 
 # Default primary key field type
