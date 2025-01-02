@@ -19,7 +19,7 @@ jobs:
       - name: Configure access to private repos
         run: |
           git config --global credential.helper store
-          echo "https://$GH_USER:$GH_TOKEN@github.com" > ~/.git-credentials
+          echo "https://${{secrets.GH_USER}}:${{secrets.GH_TOKEN}}@github.com" > ~/.git-credentials
       - name: Checkout the repo
         run: |
           git config -l --show-scope
