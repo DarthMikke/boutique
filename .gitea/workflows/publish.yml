@@ -19,7 +19,9 @@ jobs:
           echo Checking out to $(pwd)
           set -x
           URL=$(echo ${{gitea.server_url}} | sed 's/:\/\//:\/\/oauth:${{gitea.token}}@/')
-          git clone $URL/${{gitea.repository}} boutique
+          git clone --depth=1 $URL/${{gitea.repository}} boutique
+          cd boutique
+          git submodule update --init --recursive
       - name: Install Docker
         run: |
           apt-get update
