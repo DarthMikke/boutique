@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=../github-workflow.schema.json
+name: Test, build and publish
+
+on:
+  push:
+    tags:
+      - "*"
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    container:
+      image: node:20-bookworm
+      options: --dns 100.100.100.100
+    steps:
+      - name: Install Git
+        run: apt install git
+      - name: Checkout the repo
+        run: |
+          echo Checking out to $(pwd)
+          set -x
+          URL=$(echo ${{gitea.server_url}} | sed 's/:\/\//:\/\/oauth:${{gitea.token}}@/')
+          git clone $URL/${{gitea.repository}}
+      - name: Build and publish the image
+        run: tools/publish.sh
