@@ -32,3 +32,5 @@ docker buildx build \
  --push \
  -f tools/Dockerfile \
  .
+docker buildx stop millim
+docker buildx rm millim
