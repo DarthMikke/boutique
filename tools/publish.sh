@@ -23,7 +23,7 @@ echo $IMAGE:$VERSION
 docker buildx create --driver docker-container --name millim
 docker buildx use millim
 
-docker login ghcr.io
+echo $DOCKER_PASS | docker login --username $DOCKER_USER --password-stdin ghcr.io
 docker buildx build \
  --platform linux/amd64,linux/arm64,linux/arm64/v6 \
  --build-arg DB_NAME=$DB_NAME \

@@ -50,4 +50,7 @@ jobs:
         run: |
           cd boutique
           chmod +x tools/*.sh
-          tools/build.sh
+          tools/publish.sh
+        env:
+          DOCKER_USER: ${{secrets.GH_USER}}
+          DOCKER_PASS: ${{secrets.GH_TOKEN}}
