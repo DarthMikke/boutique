@@ -25,7 +25,7 @@ jobs:
           echo Checking out to $(pwd)
           set -x
           URL=$(echo ${{gitea.server_url}} | sed 's/:\/\//:\/\/oauth:${{gitea.token}}@/')
-          git clone --depth=1 $URL/${{gitea.repository}} boutique
+          git clone $URL/${{gitea.repository}} boutique
           cd boutique
           git fetch
           git checkout ${{gitea.ref_name}}
