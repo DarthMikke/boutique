@@ -24,13 +24,14 @@ docker buildx create --driver docker-container --name millim
 docker buildx use millim
 
 echo $DOCKER_PASS | docker login --username $DOCKER_USER --password-stdin ghcr.io
-docker buildx build \
+RET=$(docker buildx build \
  --platform linux/amd64,linux/arm64,linux/arm64/v6 \
  --build-arg DB_NAME=$DB_NAME \
  -t $IMAGE:$VERSION \
  -t $IMAGE:latest \
  --push \
  -f tools/Dockerfile \
- .
+ .)
 docker buildx stop millim
 docker buildx rm millim
+exit $RET
