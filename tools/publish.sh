@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-source sample.env
-
 CWD=`echo $(pwd) | sed 's/\//\n/g' | tail -n 1`
 if [ $CWD == "tools" ]
 then
   cd ..
 fi
+
+source tools/sample.env
 
 IMAGE=ghcr.io/darthmikke/boutique
 VERSION=$(git tag -l | tail -n 1 | sed 's/^[a-zA-Z]//g')
