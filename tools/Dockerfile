@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM ghcr.io/darthmikke/wsgi:0.0.1-b7 AS base
+FROM ghcr.io/darthmikke/wsgi:0.0.1-b7 AS base
 
 FROM base AS build
 
