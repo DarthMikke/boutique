@@ -21,8 +21,9 @@ echo Will build image with following tag:
 echo $IMAGE:$VERSION
 
 docker buildx create --driver docker-container --name millim --use \
+  --platform linux/amd64,linux/arm64,linux/arm64/v6 \
   && echo "Created builder container. Available platforms:" \
-  && docker buildx inspect millim | grep Platforms
+  && (docker buildx inspect millim | grep Platforms)
 
 
 echo $DOCKER_PASS | docker login --username $DOCKER_USER --password-stdin ghcr.io
