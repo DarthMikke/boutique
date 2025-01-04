@@ -20,8 +20,10 @@ fi
 echo Will build image with following tag:
 echo $IMAGE:$VERSION
 
-docker buildx create --driver docker-container --name millim
-docker buildx use millim
+docker buildx create --driver docker-container --name millim --use \
+  && echo "Created builder container. Available platforms:" \
+  && docker buildx inspect millim | grep Platforms
+
 
 echo $DOCKER_PASS | docker login --username $DOCKER_USER --password-stdin ghcr.io
 RET=$(docker buildx build \
