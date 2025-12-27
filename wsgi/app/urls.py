@@ -1,5 +1,17 @@
+import os
+
 from django.urls import path
 from .views import *
+
+from .imported_receipt import Service
+from .azure import *
+
+azure_endpoint = os.environ['AZURE_ENDPOINT']
+azure_key = os.environ['AZURE_KEY']
+ReceiptUploadView.service = Service(
+     AzureReceiptScanner(azure_endpoint, azure_key),
+     AzureReceiptInterpreter()
+)
 
 urlpatterns = [
     path('', Login.as_view(), name='login'),
@@ -19,6 +31,8 @@ urlpatterns = [
     # path('brands/add', BrandView, name='brand_add'),
     # path('brands/<brand_id>', BrandView, name='brand'),
     # path('receipts', ReceiptList, name='receipt_list'),
+    # path('imports/<import_id>/process', ImportProcessView.as_view(),
+    #      name='import_process')
     path('receipts/new', ReceiptNewView.as_view(), name='receipt_new'),
     path('receipts/upload', ReceiptUploadView.as_view(),
          name='receipt_upload'),

@@ -5,8 +5,8 @@ from app.rest_additions import TemplateListView, TemplateView
 from django.http import HttpResponse
 
 from app.models import Receipt
-from app.forms import ReceiptForm, PurchaseFormSet, ReceiptScanUploadForm
-from .receipt_upload_view import ReceiptUploadView
+from app.forms import ReceiptForm, PurchaseFormSet
+from app.imported_receipt import ReceiptUploadView
 
 # Create your views here.
 
