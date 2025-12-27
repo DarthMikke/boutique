@@ -20,5 +20,3 @@ services:
     # hostname: postgres
 volumes:
   django_venv:
-networks:
-  rproxy:
