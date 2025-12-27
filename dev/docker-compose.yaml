@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 services:
   webhost:
     image: ghcr.io/darthmikke/webhost
@@ -16,7 +16,7 @@ services:
     command: runserver 0.0.0.0:5000
     # hostname: django
   # db:
-    # image: postgres
-    # hostname: postgres
+  # image: postgres
+  # hostname: postgres
 volumes:
   django_venv:
