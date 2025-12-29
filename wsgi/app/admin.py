@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import *
-import app.interpretation
+import app.upload
 import app.imported_receipt
 
 
@@ -41,7 +41,7 @@ class ImportedReceiptAdmin(admin.ModelAdmin):
 
 
 # Register your models here.
-admin.site.register(app.interpretation.Interpretation)
+admin.site.register(app.upload.Interpretation)
 admin.site.register(app.imported_receipt.ImportedReceipt, ImportedReceiptAdmin)
 admin.site.register(app.imported_receipt.ImportedLineItemModel)
 admin.site.register(Store)

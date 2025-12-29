@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 
 from app.rest_additions import TemplateView
-from app.interpretation import ReceiptScanner, Interpretation
+from app.upload import ReceiptScanner, Interpretation
 
 import json
 
@@ -66,12 +66,12 @@ class Service:
         self.receipt_service = receipt_service
 
     def create_receipts_from_interpretation(self,
-                                            interpretation: Interpretation):
-        raw_interpretation = self.scanner.scan(interpretation)
-        interpretation.raw = json.dumps(raw_interpretation)
-        interpretation.provider = self.scanner.name
+                                            upload: Interpretation):
+        raw_interpretation = self.scanner.scan(upload)
+        upload.raw = json.dumps(raw_interpretation)
+        upload.provider = self.scanner.name
 
-        interpretation.save()
+        upload.save()
 
         imported_receipts = self.interpreter.interpret(raw_interpretation)
         if self.receipt_service:
@@ -102,10 +102,10 @@ class ReceiptUploadView(TemplateView):
             return HttpResponse(repr(form), status=500,
                                 content_type='text/plain')
 
-        interpretation: interpretation.Model = form.save()
-        interpretation.save()
+        upload: interpretation.Model = form.save()
+        upload.save()
 
-        self.service.create_receipts_from_interpretation(interpretation)
+        self.service.create_receipts_from_interpretation(upload)
 
         return HttpResponse(status=302, headers={
             "location": reverse('dashboard')

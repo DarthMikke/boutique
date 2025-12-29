@@ -12,7 +12,7 @@ from azure.core.credentials import AzureKeyCredential
 from azure.ai.documentintelligence import DocumentIntelligenceClient
 from azure.ai.documentintelligence.models import AnalyzeResult
 
-from app.interpretation import ReceiptScanner, Interpretation
+from app.upload import ReceiptScanner, Interpretation
 from app.imported_receipt import Interpreter, ImportedReceipt, \
     ImportedLineItemModel
 
@@ -28,8 +28,8 @@ class AzureReceiptScanner(ReceiptScanner):
             self.endpoint, self.credential
         )
 
-    def scan(self, interpretation: Interpretation()) -> dict:
-        with open(interpretation.attachment.path, 'rb') as f:
+    def scan(self, upload: Interpretation()) -> dict:
+        with open(upload.attachment.path, 'rb') as f:
             print("Started analyzing")
             poller = self.client.begin_analyze_document(
                 "prebuilt-receipt", body=f, locale="no-NO"
@@ -37,7 +37,7 @@ class AzureReceiptScanner(ReceiptScanner):
             analyzed_path = str(uuid.uuid4()) + '.json'
             receipts: AnalyzeResult = poller.result()
 
-        interpretation.raw.save(
+        upload.raw.save(
             analyzed_path,
             ContentFile(json.dumps(receipts.as_dict()))
         )
