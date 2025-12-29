@@ -1,3 +1,6 @@
+# Documentation available at:
+# https://learn.microsoft.com/en-us/python/api/overview/azure/ai-documentintelligence-readme
+
 from datetime import datetime
 
 from django.core.files.base import ContentFile
@@ -25,7 +28,7 @@ class AzureReceiptScanner(ReceiptScanner):
             self.endpoint, self.credential
         )
 
-    def interpret(self, interpretation: Interpretation()) -> dict:
+    def scan(self, interpretation: Interpretation()) -> dict:
         with open(interpretation.attachment.path, 'rb') as f:
             print("Started analyzing")
             poller = self.client.begin_analyze_document(

@@ -18,7 +18,7 @@ class ReceiptScanner:
     provider.
     """
 
-    def interpret(self, interpretation: Interpretation) -> dict:
+    def scan(self, interpretation: Interpretation) -> dict:
         """
         actual implementation goes here.
         """

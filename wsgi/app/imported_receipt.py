@@ -67,7 +67,7 @@ class Service:
 
     def create_receipts_from_interpretation(self,
                                             interpretation: Interpretation):
-        raw_interpretation = self.scanner.interpret(interpretation)
+        raw_interpretation = self.scanner.scan(interpretation)
         interpretation.raw = json.dumps(raw_interpretation)
         interpretation.provider = self.scanner.name
 
