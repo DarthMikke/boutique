@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class Interpretation(models.Model):
+class Upload(models.Model):
     date = models.DateTimeField(
         name='date', db_column='date',
         null=True, blank=True,
@@ -18,7 +18,7 @@ class ReceiptScanner:
     provider.
     """
 
-    def scan(self, upload: Interpretation) -> dict:
+    def scan(self, upload: Upload) -> dict:
         """
         actual implementation goes here.
         """

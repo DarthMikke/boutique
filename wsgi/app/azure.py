@@ -12,7 +12,7 @@ from azure.core.credentials import AzureKeyCredential
 from azure.ai.documentintelligence import DocumentIntelligenceClient
 from azure.ai.documentintelligence.models import AnalyzeResult
 
-from app.upload import ReceiptScanner, Interpretation
+from app.upload import ReceiptScanner, Upload
 from app.imported_receipt import Interpreter, ImportedReceipt, \
     ImportedLineItemModel
 
@@ -28,7 +28,7 @@ class AzureReceiptScanner(ReceiptScanner):
             self.endpoint, self.credential
         )
 
-    def scan(self, upload: Interpretation()) -> dict:
+    def scan(self, upload: Upload) -> dict:
         with open(upload.attachment.path, 'rb') as f:
             print("Started analyzing")
             poller = self.client.begin_analyze_document(

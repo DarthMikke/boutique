@@ -41,7 +41,7 @@ class ImportedReceiptAdmin(admin.ModelAdmin):
 
 
 # Register your models here.
-admin.site.register(app.upload.Interpretation)
+admin.site.register(app.upload.Upload)
 admin.site.register(app.imported_receipt.ImportedReceipt, ImportedReceiptAdmin)
 admin.site.register(app.imported_receipt.ImportedLineItemModel)
 admin.site.register(Store)

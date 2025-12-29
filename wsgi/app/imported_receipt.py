@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 
 from app.rest_additions import TemplateView
-from app.upload import ReceiptScanner, Interpretation
+from app.upload import ReceiptScanner, Upload
 
 import json
 
@@ -27,7 +27,7 @@ class ImportedReceipt(models.Model):
                                      null=True, blank=True)
     currency = models.CharField(max_length=10,
                                 null=True, blank=True)
-    interpretation = models.ForeignKey(Interpretation,
+    interpretation = models.ForeignKey(Upload,
                                        on_delete=models.SET_NULL,
                                        null=True,
                                        blank=True,
@@ -66,7 +66,7 @@ class Service:
         self.receipt_service = receipt_service
 
     def create_receipts_from_interpretation(self,
-                                            upload: Interpretation):
+                                            upload: Upload):
         raw_interpretation = self.scanner.scan(upload)
         upload.raw = json.dumps(raw_interpretation)
         upload.provider = self.scanner.name
@@ -82,7 +82,7 @@ class Service:
 
 class ReceiptUploadForm(ModelForm):
     class Meta:
-        model = Interpretation
+        model = Upload
         fields = [
             'attachment',
         ]
