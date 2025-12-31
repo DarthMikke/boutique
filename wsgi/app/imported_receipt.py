@@ -1,10 +1,10 @@
 from django.db import models
 from django.forms import ModelForm
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 
 from app.rest_additions import TemplateView
-from app.upload import ReceiptScanner, Upload
+from app.upload import Upload
 
 import json
 
@@ -51,67 +51,36 @@ class ImportedLineItemModel(models.Model):
 
 class Service:
     # TODO: Make this a list of scanners and interpreters
-    scanner: ReceiptScanner = None
     interpreter: Interpreter = None
     receipt_service = None
 
     def __init__(
         self,
-        scanner: ReceiptScanner,
         interpreter: Interpreter,
         receipt_service=None,
     ):
-        self.scanner = scanner
         self.interpreter = interpreter
         self.receipt_service = receipt_service
 
-    def create_receipts_from_interpretation(self,
-                                            upload: Upload):
-        raw_interpretation = self.scanner.scan(upload)
-        upload.raw = json.dumps(raw_interpretation)
-        upload.provider = self.scanner.name
+    def create_import_from_upload(self, upload: Upload):
+        # TODO: Maybe should check if the interpreter's name is the same
+        # as scanner's?
+        # upload.provider == self.interpreter.name
 
-        upload.save()
-
-        imported_receipts = self.interpreter.interpret(raw_interpretation)
+        imported_receipts = self.interpreter.interpret(upload)
         if self.receipt_service:
             for r in imported_receipts:
                 receipt = self.receipt_service.from_imported(r)
                 receipt.save()
 
 
-class ReceiptUploadForm(ModelForm):
-    class Meta:
-        model = Upload
-        fields = [
-            'attachment',
-        ]
-
-
-class ReceiptUploadView(TemplateView):
-    template_name = "boutique/receipt_upload.html"
-    identifiers = []
+class UploadProcessView(TemplateView):
+    template_name = "boutique/upload_process.html"
+    identifiers = [('id', 'upload_id')]
+    model = Upload
     service: Service = None
 
-    def post(self, request):
-        form = ReceiptUploadForm(request.POST, request.FILES)
-        valid = form.is_valid()
+    def get(self, request, **kwargs):
+        self.service.create_import_from_upload(self.instance)
 
-        if not valid:
-            # TODO nice error message
-            return HttpResponse(repr(form), status=500,
-                                content_type='text/plain')
-
-        upload: interpretation.Model = form.save()
-        upload.save()
-
-        self.service.create_receipts_from_interpretation(upload)
-
-        return HttpResponse(status=302, headers={
-            "location": reverse('dashboard')
-        })
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = ReceiptUploadForm()
-        return context
+        return super().get(request, **kwargs)

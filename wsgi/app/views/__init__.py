@@ -6,7 +6,6 @@ from django.http import HttpResponse
 
 from app.models import Receipt
 from app.forms import ReceiptForm, PurchaseFormSet
-from app.imported_receipt import ReceiptUploadView
 
 # Create your views here.
 

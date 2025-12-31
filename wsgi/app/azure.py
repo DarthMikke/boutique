@@ -10,7 +10,7 @@ import uuid
 
 from azure.core.credentials import AzureKeyCredential
 from azure.ai.documentintelligence import DocumentIntelligenceClient
-from azure.ai.documentintelligence.models import AnalyzeResult
+from azure.ai.documentintelligence.models import AnalyzeResult, AnalyzedDocument
 
 from app.upload import ReceiptScanner, Upload
 from app.imported_receipt import Interpreter, ImportedReceipt, \
@@ -48,78 +48,87 @@ class AzureReceiptScanner(ReceiptScanner):
 class AzureReceiptInterpreter(Interpreter):
     name = 'azure'
 
-    def interpret(self, data: dict) -> [ImportedReceipt]:
-        print("Started interpreting documents")
-        analyzed = AnalyzeResult(data)
+    @classmethod
+    def imported_receipt_from_document(cls, doc: AnalyzedDocument) -> ImportedReceipt:
+        fields = doc.fields
+        transaction_tstamp = (
+            fields['TransactionDate']['valueDate'],
+            fields['TransactionTime']['valueTime']
+            if 'TransactionTime' in fields.keys()
+            else '12:00:00'
+        )
+        transaction_dt = datetime.fromisoformat(
+            "%s %s" % transaction_tstamp
+        )
 
-        receipts: [ImportedReceipt] = []
-        for doc in analyzed.documents:
-            fields = doc.fields
-            transaction_tstamp = (
-                fields['TransactionDate']['valueDate'],
-                fields['TransactionTime']['valueTime']
-                if 'TransactionTime' in fields.keys()
-                else '12:00:00'
-            )
-            transaction_dt = datetime.fromisoformat(
-                "%s %s" % transaction_tstamp
-            )
+        price = float(fields['Total']['valueCurrency']['amount'])
+        currency = fields['Total']['valueCurrency']['currencyCode']
 
-            price = float(fields['Total']['valueCurrency']['amount'])
-            currency = fields['Total']['valueCurrency']['currencyCode']
+        address = fields['MerchantAddress'].value_address \
+            if 'MerchantAddress' in fields.keys() else None
+        merchant_address = None
+        if address is not None:
+            merchant_address = ''
 
-            address = fields['MerchantAddress'].value_address \
-                if 'MerchantAddress' in fields.keys() else None
-            merchant_address = None
-            if address is not None:
-                merchant_address = ''
+            street_address = address.street_address
+            if street_address:
+                merchant_address += street_address + ', '
 
-                street_address = address.street_address
-                if street_address:
-                    merchant_address += street_address + ', '
+            postal_code = address.postal_code
+            if postal_code is not None:
+                merchant_address += postal_code + ' '
 
-                postal_code = address.postal_code
-                if postal_code is not None:
-                    merchant_address += postal_code + ' '
+            city = address.city
+            if city is not None:
+                merchant_address += city
 
-                city = address.city
-                if city is not None:
-                    merchant_address += city
+        merchant = fields['MerchantName'].value_string \
+            if 'MerchantName' in fields.keys() else None
 
-            merchant = fields['MerchantName'].value_string \
-                if 'MerchantName' in fields.keys() else None
+        r = ImportedReceipt(
+            date=transaction_dt,
+            merchant=merchant,
+            merchantAddress=merchant_address,
+            totalPrice=price,
+            currency=currency,
+            interpretation=None)
+        r.save()
 
-            r = ImportedReceipt(
-                date=transaction_dt,
-                merchant=merchant,
-                merchantAddress=merchant_address,
-                totalPrice=price,
+        for li in fields['Items'].value_array:
+            fs = li.value_object
+            product = fs['Description'].value_string \
+                if 'Description' in fs.keys() else None
+            quantity = float(fs['Quantity'].value_number) \
+                if 'Quantity' in fs.keys() else None
+            quantityUnit = fs['QuantityUnit'].value_string \
+                if 'QuantityUnit' in fs.keys() else None
+            totalPrice = float(fs['TotalPrice'].value_currency.amount) \
+                if 'TotalPrice' in fs.keys() else None
+            currency = fs['TotalPrice'].value_currency.currency_code \
+                if 'TotalPrice' in fs.keys() else None
+
+            line_item = ImportedLineItemModel(
+                product=product,
+                quantity=quantity,
+                quantityUnit=quantityUnit,
+                totalPrice=totalPrice,
                 currency=currency,
-                interpretation=None)
+                parent=r,
+            )
+            line_item.save()
+
+        return r
+
+    def interpret(self, upload: Upload) -> [ImportedReceipt]:
+        print("Started interpreting documents")
+        analyzed = AnalyzeResult(json.loads(upload.raw.name))
+
+        receipts: [ImportedReceipt] = [
+            self.imported_receipt_from_document(doc) for doc
+            in analyzed.documents
+        ]
+        for r in receipts:
+            r.interpretation = upload
             r.save()
-            receipts.append(r)
-
-            for li in fields['Items'].value_array:
-                fs = li.value_object
-                product = fs['Description'].value_string \
-                    if 'Description' in fs.keys() else None
-                quantity = float(fs['Quantity'].value_number) \
-                    if 'Quantity' in fs.keys() else None
-                quantityUnit = fs['QuantityUnit'].value_string \
-                    if 'QuantityUnit' in fs.keys() else None
-                totalPrice = float(fs['TotalPrice'].value_currency.amount) \
-                    if 'TotalPrice' in fs.keys() else None
-                currency = fs['TotalPrice'].value_currency.currency_code \
-                    if 'TotalPrice' in fs.keys() else None
-
-                line_item = ImportedLineItemModel(
-                    product=product,
-                    quantity=quantity,
-                    quantityUnit=quantityUnit,
-                    totalPrice=totalPrice,
-                    currency=currency,
-                    parent=r,
-                )
-                line_item.save()
 
         return receipts
